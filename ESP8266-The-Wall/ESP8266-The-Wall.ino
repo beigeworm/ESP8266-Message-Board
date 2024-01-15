@@ -46,10 +46,10 @@ void setup() {
     html += "<h1 style=\"font-size: 36px;\">THE WALL | Public Message Board</h1>";
     html += "<form id='messageForm' action='/post' method='post'>";
     html += "<input type='text' name='message' style=\"font-size: 24px;\" placeholder='Enter your message' autofocus>";
-    html += "<input type='submit' value='Post' style=\"padding: 10px 20px; border-radius: 5px; background-color: #00cc00; color: white; font-weight: bold; font-size: 24px;\">";
+    html += "<input type='submit' value='Post' style=\"border-radius: 5px; background-color: #00cc00; color: white; font-weight: bold; font-size: 24px;\">";
     html += "</form>";
     html += "<h2 style=\"font-size: 36px;\">Recent Messages:</h2>";
-    html += "<div id='messageBoard' style=\"padding: 10px 20px; border-radius: 5px; background-color: #404040; color: white; font-size: 24px;\">" + messageBoard + "</div>";
+    html += "<div id='messageBoard' style=\"background-color: #404040; color: white; font-size: 24px;\">" + messageBoard + "</div>";
     html += "<script>function refreshMessages() {";
     html += "var xhr = new XMLHttpRequest();";
     html += "xhr.onreadystatechange = function() {";
