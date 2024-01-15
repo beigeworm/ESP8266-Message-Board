@@ -8,7 +8,7 @@
 #include <ESP8266mDNS.h>
 #include <FS.h>
 
-const char *ssid = "The Wall";
+const char *ssid = "URL = http://wall.local";
 const char *password = "";
 
 AsyncWebServer server(80);
@@ -105,6 +105,9 @@ void saveMessagesToFile() {
     Serial.println("Error opening messages file for writing");
     return;
   }
+  file.print(messageBoard);
+  file.close();
+}
   file.print(messageBoard);
   file.close();
 }
