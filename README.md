@@ -23,5 +23,5 @@ Go to > Tools -> Board: "SOME BOARD NAME"
 
 Go to > Tools -> Erase Flash -> 'All Flash Contents'.
 
-
+Click Upload Script.
 
