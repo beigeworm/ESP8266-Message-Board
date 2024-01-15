@@ -2,7 +2,7 @@
 
 **ESP8266 Message Board**
 - Creates an AP named 'The Wall' and serves a simple webpage where anyone can leave an annoymous message.
-- Simply connect to the Access Point that is created (SSID = 'The Wall') and navigate to http://thewall.local
+- Simply connect to the Access Point that is created (SSID = 'The Wall') and navigate to http://wall.local OR http://192.168.4.1
 
 # INSTALL INSTRUCTIONS
 **Install from source**
