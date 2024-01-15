@@ -19,7 +19,7 @@ Install the libraries. Go to Sketch -> Include Library -> Add .ZIP Library and a
 
 Now you only need to install the board. Go to > Tools -> Board: "<SOME BOARD NAME>" -> Boards Manager. In the search bar, type `esp8266` by ESP8266 Community. I installed version 2.5.5 2.6.0.
 
-Go to > Tools -> Board: "<SOME BOARD NAME>"
+Go to > Tools -> Board: "SOME BOARD NAME"
 
 Go to > Tools -> Erase Flash -> 'All Flash Contents'.
 
