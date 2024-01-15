@@ -1,7 +1,7 @@
 
 // 'THE WALL' [ESP8266 Message Board]
 //Creates an AP named 'The Wall' and serves a simple webpage where anyone can leave an annoymous message.
-//Simply connect to the Access Point that is created (SSID = 'The Wall') and navigate to http://wall.local
+//Simply connect to the Access Point that is created (SSID = 'The Wall') and navigate to http://wall.local OR http://192.168.4.1
 
 #include <ESP8266WiFi.h>
 #include <ESPAsyncTCP.h>
