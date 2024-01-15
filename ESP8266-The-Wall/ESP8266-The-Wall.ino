@@ -1,4 +1,3 @@
-
 // 'THE WALL' [ESP8266 Message Board]
 //Creates an AP named 'The Wall' and serves a simple webpage where anyone can leave an annoymous message.
 //Simply connect to the Access Point that is created (SSID = 'The Wall') and navigate to http://thewall.local
@@ -7,7 +6,7 @@
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <ESP8266mDNS.h>
-#include <FS.h> // Include the SPIFFS library
+#include <FS.h>
 
 const char *ssid = "The Wall";
 const char *password = "";
@@ -86,7 +85,6 @@ void setup() {
 
 void loop() {
   MDNS.update();
-  // Other loop tasks, if any
 }
 
 void loadMessagesFromFile() {
@@ -96,8 +94,6 @@ void loadMessagesFromFile() {
     Serial.println("Error opening messages file for reading");
     return;
   }
-
-  // Read content from file
   messageBoard = file.readString();
   file.close();
 }
@@ -109,8 +105,6 @@ void saveMessagesToFile() {
     Serial.println("Error opening messages file for writing");
     return;
   }
-
-  // Write content to file
   file.print(messageBoard);
   file.close();
 }
