@@ -102,9 +102,6 @@ void setup() {
     Serial.println("mDNS responder started");
   }
 
-  // Print the mDNS address
-  Serial.println("Open a browser and enter http://wall.local");
-
   if (!SPIFFS.begin()) {
     Serial.println("Error initializing SPIFFS");
     return;
