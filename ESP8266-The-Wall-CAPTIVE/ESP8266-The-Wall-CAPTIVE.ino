@@ -9,7 +9,6 @@
 #include <FS.h>
 #include <DNSServer.h>
 
-
 const char *ssid = "THE WALL: http://wall.local";
 const char *password = "";
 
@@ -72,12 +71,12 @@ void handlePost() {
 }
 
 void handleLogin() {
-  String html = "<html><body style=\"background-color: #9c9786; background-image: url(data:image/png;base64,\">";
+  String html = "<html><body style=\"background-color: #000000; background-image: url(data:image/png;base64,\">";
   html += "<h1 style=\"border-radius: 10px; background-color: #404040; color: white; font-size: 36px;\"> THE WALL | Public Message Board</h1>";
-  html += "<input type='button' value='login' style=\"border-radius: 10px; background-color: #00cc00; color: white; font-weight: bold; font-size: 128px;\" onclick=\"window.location.href = '/';\">";
   html += "<p style=\"border-radius: 10px; background-color: #404040; color: white; font-weight: bold; font-size: 24px;\"> Uptime: " + getUptime() + "</p>";
+  html += "<input type='button' value='login' style=\"border-radius: 30px; background-color: #d62020; color: white; font-weight: bold; font-size: 256px;\" onclick=\"window.location.href = '/';\">";
+  html += "<h3 style=\"border-radius: 10px; background-color: #404040; color: white; font-size: 24px;\"> If you lose this page - Go to: http://wall.local in your browser</h3>";
   html += "</form>";
-  
   html += "</body></html>";
   server.send(200, "text/html", html);
 }
@@ -101,6 +100,9 @@ void setup() {
   } else {
     Serial.println("mDNS responder started");
   }
+
+  // Print the mDNS address
+  Serial.println("Open a browser and enter http://wall.local");
 
   if (!SPIFFS.begin()) {
     Serial.println("Error initializing SPIFFS");
