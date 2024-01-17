@@ -71,10 +71,10 @@ void handlePost() {
 }
 
 void handleLogin() {
-  String html = "<html><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"></head><body style=\"background-color: #000000; background-image: url(data:image/png;base64,\">";
+  String html = "<html><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"></head><body style=\"background:url(data:image/png;base64,), linear-gradient(to bottom left, #fa711b, #8104c9)\">";
   html += "<h1 style=\"border-radius: 10px; background-color: #404040; color: white; font-size: 36px;\"> THE WALL | Public Message Board</h1>";
   html += "<p style=\"border-radius: 10px; background-color: #404040; color: white; font-weight: bold; font-size: 16px;\"> Uptime: " + getUptime() + "</p>";
-  html += "<input allign='center' type='button' value='login' style=\"border-radius: 20px; background-color: #d62020; color: white; font-weight: bold; font-size: 64px;\" onclick=\"window.location.href = '/';\">";
+  html += "<input type='button' value='Enter Chat' allign='center' style=\"border-radius: 20px; background-color: #d62020; color: white; font-weight: bold; font-size: 64px;\" onclick=\"window.location.href = '/';\">";
   html += "<h3 style=\"border-radius: 10px; background-color: #404040; color: white; font-size: 20px;\"> If you lose this page - Go to: http://wall.local in your browser</h3>";
   html += "</form>";
   html += "</body></html>";
