@@ -123,6 +123,7 @@ void setup() {
 
   // Start server
   server.begin();
+  dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
   dnsServer.start(53, "*", WiFi.softAPIP());
   Serial.println("Server started");
 }
