@@ -9,7 +9,7 @@
 #include <FS.h>
 #include <DNSServer.h>
 
-const char *ssid = "THE WALL";
+const char *ssid = "📣 The Wall 📣";
 const char *password = "";
 
 ESP8266WebServer server(80);
