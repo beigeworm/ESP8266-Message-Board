@@ -1,5 +1,7 @@
 # 'THE WALL' [ESP8266 Message Board]
 
+![Screenshot_2](https://github.com/beigeworm/ESP8266-Message-Board/assets/93350544/aa7f49d8-6756-406e-909e-72017144eb40)
+
 **ESP8266 Message Board**
 - Creates an AP named 'THE WALL' and serves a simple webpage where anyone can leave an annoymous message.
 - Simply connect to the Access Point that is created and navigate to http://wall.local OR http://192.168.4.1
