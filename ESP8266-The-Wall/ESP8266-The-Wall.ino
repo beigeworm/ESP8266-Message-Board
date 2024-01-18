@@ -1,4 +1,4 @@
-// 'THE WALL' [ESP8266 Message Board] (CAPTIVE)
+// 'THE WALL' [ESP8266 Public Message Board] (CAPTIVE)
 //Creates an AP named 'The Wall' and serves a simple webpage where anyone can leave an annoymous message.
 //Simply connect to the Access Point that is created and navigate to http://wall.local OR http://192.168.4.1
 // On Android Devices a login pop up should appear
@@ -9,7 +9,7 @@
 #include <FS.h>
 #include <DNSServer.h>
 
-const char *ssid = "THE WALL: http://wall.local";
+const char *ssid = "THE WALL";
 const char *password = "";
 
 ESP8266WebServer server(80);
