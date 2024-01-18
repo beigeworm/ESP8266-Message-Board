@@ -8,7 +8,7 @@
 # INSTALL INSTRUCTIONS
 **Install from source**
 
-You need to install the Arduino IDE 
+You need to install the Arduino IDE, version 1.8.16
 
 From there you need a couple installations clicking the upload button. First got File -> Preferences. At the bottom of the window, you should see Additional Boards Manager URLS. Click the little icon at the end at the end of that line. A new window should show up asking you to Enter additional URLS, one for each row. Add:
 
@@ -18,11 +18,13 @@ And click OK.
 
 Install the libraries. Go to Sketch -> Include Library -> Add .ZIP Library and add the supplied libraries.
 
-Now you only need to install the board. Go to > Tools -> Board: "<SOME BOARD NAME>" -> Boards Manager. In the search bar, type `esp8266` by ESP8266 Community. I installed version 2.5.5 2.6.0.
+Now you only need to install the board. Go to > Tools -> Board: "<SOME BOARD NAME>" -> Boards Manager. In the search bar, type `esp8266` by ESP8266 Community. install version 2.7.3.
 
 Go to > Tools -> Board: "SOME BOARD NAME"
 
 Go to > Tools -> Erase Flash -> 'All Flash Contents'.
+
+![Screenshot_1](https://github.com/beigeworm/ESP8266-Message-Board/assets/93350544/c3a6672d-0c44-4068-b4a5-61b9d2dcd31a)
 
 Click Upload Script.
 
