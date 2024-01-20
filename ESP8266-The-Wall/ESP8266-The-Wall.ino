@@ -56,8 +56,6 @@ void handleRoot() {
   server.send(200, "text/html", html);
 }
 
-// ... (rest of your code)
-
 void handleMessages() {
   server.send(200, "text/plain", messageBoard);
 }
