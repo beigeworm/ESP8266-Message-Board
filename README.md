@@ -1,4 +1,4 @@
-# 'THE WALL' [ESP8266 Message Board]
+# 'THE WALL' [ESP8266/32 Message Board]
 
 ![Screenshot_2](https://github.com/beigeworm/ESP8266-Message-Board/assets/93350544/aa7f49d8-6756-406e-909e-72017144eb40)
 
