@@ -47,5 +47,7 @@ Go to Tools -> Manage Libraries
 
 ![Screenshot_1](https://github.com/beigeworm/ESP8266-and-ESP32-Message-Board/assets/93350544/46833ec5-c7ee-4317-8864-9c002a823b2d)
 
+Make sure to select 'Erase all flash contents' to ENABLED.
+
 Click Upload Script.
 
