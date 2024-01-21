@@ -30,7 +30,7 @@ And click OK.
 - Now you only need to install the board. Go to > Tools -> Board: "<SOME BOARD NAME>" -> Boards Manager. In the search bar, type `esp8266` by ESP8266 Community. install version 2.7.3.
 - Go to > Tools -> Board: "SOME BOARD NAME"
 - Go to > Tools -> Erase Flash -> 'All Flash Contents'.
-- 
+
 ![Screenshot_1](https://github.com/beigeworm/ESP8266-Message-Board/assets/93350544/c3a6672d-0c44-4068-b4a5-61b9d2dcd31a)
 
 Click Upload Script.
