@@ -41,7 +41,7 @@ void handleRoot() {
   html += "<p style=\"border-radius: 5px; background-color: #404040; color: white; font-weight: bold; font-size: 16px;\"> Uptime: " + getUptime() + "</p>";
   html += "</form></div>";
   html += "<h2 align='center' style=\"border-radius: 5px; background-color: #404040; color: white; font-size: 30px;\"> Recent Messages:</h2>";
-  html += "<div id='messageBoard' style=\"background-color: #404040; color: white; font-size: 24px;\">" + messageBoard + "</div>";
+  html += "<div id='messageBoard' style=\"border-radius: 5px; background-color: #404040; color: white; font-size: 24px;\">" + messageBoard + "</div>";
   html += "<script>function refreshMessages() {";
   html += "var xhr = new XMLHttpRequest();";
   html += "xhr.onreadystatechange = function() {";
