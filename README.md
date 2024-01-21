@@ -21,6 +21,7 @@ From there you need a couple installations clicking the upload button. First got
 > https://espressif.github.io/arduino-esp32/package_esp32_index.json
 
 And click OK.
+
 -------------------------------------------------------------------------------------------------------------
 
 
@@ -33,6 +34,7 @@ And click OK.
 ![Screenshot_1](https://github.com/beigeworm/ESP8266-Message-Board/assets/93350544/c3a6672d-0c44-4068-b4a5-61b9d2dcd31a)
 
 Click Upload Script.
+
 -------------------------------------------------------------------------------------------------------------
 
 **For ESP32**
