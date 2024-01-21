@@ -82,10 +82,10 @@ void setup() {
   html += "<div align='center'>";
   html += "<h1 style=\"border-radius: 5px; background-color: #404040; color: white; font-size: 36px;\"> 📣 THE WALL 📣</h1>";
   html += "<h2 style=\"border-radius: 5px; background-color: #404040; color: white; font-size: 24px;\"> Public Message Board</h2>";
-  html += "<p style=\"border-radius: 5px; background-color: #404040; color: white; font-weight: bold; font-size: 16px;\"> Uptime: " + getUptime() + "</p>";
   html += "<form id='messageForm' action='/post' method='post' style=\"border-radius: 5px; background-color: #404040; color: white;\">";
   html += "<input type='text' name='message' style=\"border-radius: 5px; font-size: 24px;\" placeholder='Enter your message' autofocus>";
   html += "<input type='submit' value='Post' style=\"border-radius: 5px; background-color: #00cc00; color: white; font-weight: bold; font-size: 26px;\">";
+  html += "<p style=\"border-radius: 5px; background-color: #404040; color: white; font-weight: bold; font-size: 16px;\"> Uptime: " + getUptime() + "</p>";
   html += "</form></div>";
   html += "<h2 align='center' style=\"border-radius: 5px; background-color: #404040; color: white; font-size: 30px;\"> Recent Messages:</h2>";
   html += "<div id='messageBoard' style=\"border-radius: 5px; background-color: #404040; color: white; font-size: 24px;\">" + messageBoard + "</div>";
