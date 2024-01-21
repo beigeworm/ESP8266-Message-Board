@@ -88,7 +88,6 @@ void handleLogin() {
 }
 
 void handleNotFound() {
-  // Redirect all requests to the captive portal
   server.sendHeader("Location", String("http://wall.local/login"), true);
   server.send(302, "text/plain", "");
 }
@@ -107,18 +106,13 @@ void setup() {
     Serial.println("mDNS responder started");
   }
 
-  // Print the mDNS address
-  Serial.println("Open a browser and enter http://wall.local");
-
   if (!SPIFFS.begin()) {
     Serial.println("Error initializing SPIFFS");
     return;
   }
-
-  // Load messages from file
+  
   loadMessagesFromFile();
 
-  // Serve HTML page
   server.on("/", HTTP_GET, handleRoot);
   server.on("/login", HTTP_GET, handleLogin);
   server.on("/messages", HTTP_GET, handleMessages);
@@ -126,8 +120,7 @@ void setup() {
   server.onNotFound(handleNotFound);
   
   startTime = millis();
-
-  // Start server
+  
   server.begin();
   dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
   dnsServer.start(53, "*", WiFi.softAPIP());
