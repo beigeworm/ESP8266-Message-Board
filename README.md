@@ -5,7 +5,13 @@
 **ESP8266/ESP32 Message Board**
 - Creates an AP named 'THE WALL' and serves a simple webpage where anyone can leave an annoymous message.
 - Simply connect to the Access Point that is created and navigate to http://wall.local OR http://192.168.4.1
-- (CAPTIVE Only) : On an Android device a pop up should appear upon connecting to the AP 
+- On Android Devices or Windows Laptops a login pop up should appear. (WORKS: Oneplus, Honor | NOT WORKING: Samsung)
+- If this doesnt work, navigate to http://wall.local OR http://192.168.4.1
+- Posted messages are saved and persisent on restarts. 
+
+**EXTRAS**
+- Use http://wall.local/wifi to see other nearby wifi networks.
+- Use http://wall.local/logs to see connected devices information.
 
 # INSTALL INSTRUCTIONS
 **Install from source**
