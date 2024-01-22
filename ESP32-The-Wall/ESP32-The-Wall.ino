@@ -1,7 +1,13 @@
 // 'THE WALL' [ESP32 Public Message Board] (CAPTIVE)
+
+// SYNOPSIS
 //Creates an AP named 'The Wall' and serves a simple webpage where anyone can leave an annoymous message.
-//Simply connect to the Access Point that is created and navigate to http://wall.local OR http://192.168.4.1
+
+// NOTES
 // On Android Devices or Windows Laptops a login pop up should appear. (WORKS: Oneplus, Honor | NOT WORKING: Samsung)
+// If this doesnt work, navigate to http://wall.local OR http://192.168.4.1
+
+// EXTRAS
 // Use http://wall.local/wifi to see other nearby wifi networks.
 // Use http://wall.local/logs to see connected devices information.
 
