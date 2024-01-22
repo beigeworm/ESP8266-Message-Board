@@ -9,7 +9,7 @@
 - If this doesnt work, navigate to http://wall.local OR http://192.168.4.1
 - Posted messages are saved and persisent on restarts. 
 
-**EXTRAS**
+**EXTRAS** (ESP32 ONLY)
 - Use http://wall.local/wifi to see other nearby wifi networks.
 - Use http://wall.local/logs to see connected devices information.
 
