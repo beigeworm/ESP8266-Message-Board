@@ -1,7 +1,8 @@
 // 'THE WALL' [ESP32 Public Message Board] (CAPTIVE)
 //Creates an AP named 'The Wall' and serves a simple webpage where anyone can leave an annoymous message.
 //Simply connect to the Access Point that is created and navigate to http://wall.local OR http://192.168.4.1
-// On Android Devices a login pop up should appear
+// On Android Devices or Windows Laptops a login pop up should appear
+// Use http://wall.local/logs to see other nearby wifi networks.
 
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
@@ -17,6 +18,7 @@ AsyncWebServer server(80);
 DNSServer dnsServer;
 
 String messageBoard;
+String deviceLogs;
 unsigned long startTime;
 
 String getUptime() {
@@ -59,23 +61,58 @@ void loadMessagesFromFile() {
   file.close();
 }
 
+void saveLogsToFile() {
+  File file = SPIFFS.open("/logs.json", "w");
+  if (!file) {
+    Serial.println("Failed to open file for writing");
+    return;
+  }
+  DynamicJsonDocument jsonDoc(1024);
+  jsonDoc["logs"] = deviceLogs;
+  serializeJson(jsonDoc, file);
+  file.close();
+}
+
+void loadLogsFromFile() {
+  File file = SPIFFS.open("/logs.json", "r");
+  if (!file) {
+    Serial.println("Failed to open file for reading");
+    return;
+  }
+  DynamicJsonDocument jsonDoc(1024);
+  deserializeJson(jsonDoc, file);
+  deviceLogs = jsonDoc["logs"].as<String>();
+  file.close();
+}
+
+void updateDeviceLogs() {
+  deviceLogs = "<h2 align='center'>Discovered Networks:</h2>";
+  int numNetworks = WiFi.scanNetworks();
+  if (numNetworks == 0) {
+    deviceLogs += "<p>No nearby networks detected..</p>";
+  } else {
+    for (int i = 0; i < numNetworks; ++i) {
+      deviceLogs += "<p>" +
+                    String("SSID: ") + WiFi.SSID(i) + "<br>" +
+                    String("BSSID: ") + WiFi.BSSIDstr(i) + "</p>";
+    }
+  }
+  saveLogsToFile();
+}
+
 void setup() {
   Serial.begin(115200);
-
-  // Set up the AP
   WiFi.softAP(ssid, password);
   IPAddress apIP = WiFi.softAPIP();
   Serial.println("Access Point IP address: " + apIP.toString());
-
   if (!SPIFFS.begin(true)) {
     Serial.println("Failed to mount file system");
     return;
   }
-
   loadMessagesFromFile();
+  loadLogsFromFile();
   startTime = millis();
 
-  // Serve the webpage
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
   String html = "<html><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=Open+Sans\"></head>";
   html += "<body style=\"background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAACVVBMVEVHcEz///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////84/////////////////////////////////////////////////////////////////////////////v////79///+//8JM9G3AAAAwnRSTlMARAMM/AsF/gIB9w39FPsHHhvREvUI+gS+2wkm8IxYCi3vBryvzSLsDjAg5qM52nK6Lh2s+BBMXqWTQiQP1sVOSUpBVePK3amCPlmdwYTY52ZWfinINDOft1/hL7O2K/aGMTex9IX5YcM81O1ceVtAanQc5Xh9fL9di5o4da070NWclj0yF6Zn4iMTiYjAJYHJf0Y6dsJ3h1JogNmQuKuZFo9a8qRQsM7onukZzEhrJwlRg40qZSyu3FNx68bq5GOgqnHbEFAAAAN5SURBVBgZ7cFVdxtXAEbRT1DNjJkZ4oAhdhw7DjMzMzNjmduUmZmZmRlP0v6ujmSQYrnRQ9bc+zJ7KxQKhUKhUCgUumIlnqzaRY9smgRMlD3tJJXIlmJSCmRJeZx+41xZMZlBD8iGKtL2yrhYC/3OtwFOiUyrZcCdWg485MqsCgY1S9EeqJVRtzLEVVJTzf0yaS1DKmUDabNkwW2kzZAFV5M2VxaQabTMI9M1Mi7BJWTcWC5xgyvD1jHMCpmVxzAFMmo2FximTSbtJ9t6GXQHIxglcxjRtTKllRE5R26cd2BWyaSYgjaTy7tXASsjh/EKFrnE6xQocupTcLzeJVzeP3fdXaqglDaSQ8GahAKzu4VcipoVnNv5HxcZ1K0gdZJTqQI0hcv4qPA4sFRBijAy56eeE/JtcVim4HiKk63mi2OTEurn9jJRQfKilc1XpdUllPLH31LxuabPP5WWr5Y5vVOnTp3gyT3Jkd9IeVd6QaZ8Q79YH77fp/9y+vR6V0aMj8cbmo5P+ar+FDBZ8FexJ6MmkvR1Eb6DRxt17uyfP/8gs9zvvuVLYLt04Fd8hz0ZdQam7ZrG2nxPBfjiMuzsvtouRQBnh3vmx0P7FftM5kVIiu/5Xnt3F30s8yKkfSILIqQ4ON2NsiFCSoNsiZDiyJYISY/VS3JXPtp3U9f198moFfgSkkY/zoDF42XSqs5V8o0hw9ioTJjwRryiTgMeccjQoOAlXsVXqKQF+55S+xgytCho80n6UFM2qXo1SU8+XD5/x4T61votG08upcxToEaRtEEnJie0kyHOnEPLto87LGlRQoHCty2h950P1Emmf/G1Kmhl4LwslUP0PbK9qIC5VdQWSiqAUkaQV61gPcviakmboWMNWZocnlewnu6WLx8oJ9sT3jgWKVDPxeS7B4iSJU/SgjH5Cp4DeGRplCGjgLgYLs+VITcDFSLTRWCDTKnBJ4bpkjEN+DwuNUPmOPii08k0TQZdh69wIRnyZNJYfFu9ozgM2iST5uEr0jY6GLBHRnWQJL1WzABPRo2Gg3BMEv3myLAlK10ok+SQMluGvZKvN6FQep0UWVAdZ7r0Nkm3yIZ3oFIxkmbKip20SVX4XFlRuY6tegufLGmvOiXVQFzWVGxUcRHImrrNCb3EBVdWPcNC2fXgXFmWr1AoFAqFQqFQ6Ar8B7oMBQn0DQfKAAAAAElFTkSuQmCC), linear-gradient(to bottom left, #fa711b, #8104c9)\">";
@@ -118,9 +155,18 @@ void setup() {
     request->send(200, "text/html", messageBoard);
   });
 
+  server.on("/logs", HTTP_GET, [](AsyncWebServerRequest *request){
+    updateDeviceLogs();
+    String logsPage = "<html><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"></head>";
+    logsPage += "<body style=\"background:url(data:image/png;base64,), linear-gradient(to bottom left, #fa711b, #8104c9)\">";
+    logsPage += "<h1 align='center' style=\"border-radius: 10px; background-color: #404040; color: white; font-size: 36px;\">Nearby WiFi Logs</h1>";
+    logsPage += "<div id='logs' style=\"background-color: #404040; color: white; font-size: 20px;\">" + deviceLogs + "</div>";
+    logsPage += "</body></html>";
+    request->send(200, "text/html", logsPage);
+  });
+
   server.onNotFound(handleNotFound);
 
-  // Start mdns
   if (!MDNS.begin("wall")) {
     Serial.println("Error setting up MDNS responder!");
     while (1) {
@@ -128,9 +174,7 @@ void setup() {
     }
   }
   Serial.println("mDNS responder started");
-  // Add service to mmdns
   MDNS.addService("http", "tcp", 80);
-  // Start server
   server.begin();
   dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
   dnsServer.start(53, "*", apIP);
@@ -138,4 +182,9 @@ void setup() {
 
 void loop() {
   dnsServer.processNextRequest();
+  static unsigned long lastUpdate = 0;
+  if (millis() - lastUpdate > 30000) {
+    updateDeviceLogs();
+    lastUpdate = millis();
+  }
 }
