@@ -1,11 +1,12 @@
 // 'THE WALL' [ESP32 Public Message Board] (CAPTIVE)
 
 // SYNOPSIS
-//Creates an AP named 'The Wall' and serves a simple webpage where anyone can leave an annoymous message.
+// Creates an AP named 'The Wall' and serves a simple webpage where anyone can leave an annoymous message.
 
 // NOTES
 // On Android Devices or Windows Laptops a login pop up should appear. (WORKS: Oneplus, Honor | NOT WORKING: Samsung)
 // If this doesnt work, navigate to http://wall.local OR http://192.168.4.1
+// Posted messages are saved and persisent on restarts. 
 
 // EXTRAS
 // Use http://wall.local/wifi to see other nearby wifi networks.
