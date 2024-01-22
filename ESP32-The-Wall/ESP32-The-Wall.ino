@@ -151,7 +151,7 @@ void updateDeviceLogs() {
       snprintf(hostname, sizeof(hostname), "Unknown");
     }
     deviceLogs += "<p>" +
-                  String("Client No: ") + String(i + 1) + ":<br>" +
+                  String("Client No: ") + String(i + 1) + "<br>" +
                   String("IP: ") + ip.toString() + "<br>" +
                   String("MAC: ") + String(hostname) + "</p>";
   }
