@@ -10,7 +10,6 @@
 - Posted messages are saved and persisent on restarts. 
 
 **EXTRAS** (ESP32 ONLY)
-- Use http://wall.local/wifi to see other nearby wifi networks.
 - Use http://wall.local/logs to see connected devices information.
 
 # INSTALL INSTRUCTIONS
