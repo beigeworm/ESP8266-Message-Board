@@ -9,7 +9,6 @@
 // Posted messages are saved and persisent on restarts. 
 
 // EXTRAS
-// Use http://wall.local/wifi to see other nearby wifi networks.
 // Use http://wall.local/logs to see connected devices information.
 
 #include <WiFi.h>
@@ -28,7 +27,6 @@ DNSServer dnsServer;
 
 String messageBoard;
 String deviceLogs;
-String wifiLogs;
 unsigned long startTime;
 
 String getUptime() {
@@ -69,45 +67,6 @@ void loadMessagesFromFile() {
   deserializeJson(jsonDoc, file);
   messageBoard = jsonDoc["messages"].as<String>();
   file.close();
-}
-
-void savewifiToFile() {
-  File file = SPIFFS.open("/wifi.json", "w");
-  if (!file) {
-    Serial.println("Failed to open file for writing");
-    return;
-  }
-  DynamicJsonDocument jsonDoc(1024);
-  jsonDoc["wifi"] = wifiLogs;
-  serializeJson(jsonDoc, file);
-  file.close();
-}
-
-void loadwifiFromFile() {
-  File file = SPIFFS.open("/wifi.json", "r");
-  if (!file) {
-    Serial.println("Failed to open file for reading");
-    return;
-  }
-  DynamicJsonDocument jsonDoc(1024);
-  deserializeJson(jsonDoc, file);
-  wifiLogs = jsonDoc["wifi"].as<String>();
-  file.close();
-}
-
-void updatewifiLogs() {
-  wifiLogs = "<h2 align='center'>Discovered Networks:</h2>";
-  int numNetworks = WiFi.scanNetworks();
-  if (numNetworks == 0) {
-    wifiLogs += "<p>No nearby networks detected..</p>";
-  } else {
-    for (int i = 0; i < numNetworks; ++i) {
-      wifiLogs += "<p>" +
-                    String("SSID: ") + WiFi.SSID(i) + "<br>" +
-                    String("BSSID: ") + WiFi.BSSIDstr(i) + "</p>";
-    }
-  }
-  savewifiToFile();
 }
 
 void saveLogsToFile() {
@@ -160,6 +119,7 @@ void updateDeviceLogs() {
 
 void setup() {
   Serial.begin(115200);
+  
   WiFi.softAP(ssid, password);
   IPAddress apIP = WiFi.softAPIP();
 
@@ -178,7 +138,6 @@ void setup() {
   
   loadMessagesFromFile();
   loadLogsFromFile();
-  loadwifiFromFile();
   startTime = millis();
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -233,16 +192,6 @@ void setup() {
     request->send(200, "text/html", logsPage);
   });
 
-  server.on("/wifi", HTTP_GET, [](AsyncWebServerRequest *request){
-    updateDeviceLogs();
-    String logsPage = "<html><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"></head>";
-    logsPage += "<body style=\"background:url(data:image/png;base64,), linear-gradient(to bottom left, #fa711b, #8104c9)\">";
-    logsPage += "<h1 align='center' style=\"border-radius: 10px; background-color: #404040; color: white; font-size: 36px;\">Nearby WiFi Logs</h1>";
-    logsPage += "<div id='logs' style=\"background-color: #404040; color: white; font-size: 20px;\">" + wifiLogs + "</div>";
-    logsPage += "</body></html>";
-    request->send(200, "text/html", logsPage);
-  });
-
   server.onNotFound(handleNotFound);
   server.begin();
   dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
@@ -253,7 +202,6 @@ void loop() {
   dnsServer.processNextRequest();
   static unsigned long lastUpdate = 0;
   if (millis() - lastUpdate > 30000) {
-    updatewifiLogs();
     updateDeviceLogs();
     lastUpdate = millis();
   }
