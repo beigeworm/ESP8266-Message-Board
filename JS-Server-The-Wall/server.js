@@ -40,19 +40,26 @@ app.get('/', (req, res) => {
       <body style="background:url('https://i.ibb.co/4PhW7wF/whh.png'), linear-gradient(to bottom left, #fa711b, #8104c9)">
 	<div align='center'>
 		${generateGIFs(9)}
-          <h1 style="border-radius: 5px; background-color: #404040; color: white; font-size: 48px;"> ðŸ“£ THE WALL ðŸ“£</h1>
-          <h2 style="border-radius: 5px; background-color: #404040; color: white; font-size: 24px;"> Public Message Board</h2>
-          <form id='messageForm' action='/post' method='post' style="border-radius: 5px; background-color: #404040; color: white;">
-            <input type='text' name='message' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your message' autofocus>
-            <input type='submit' value='Post' style="border-radius: 5px; background-color: #00cc00; color: white; font-weight: bold; font-size: 26px;">
-            <p style="border-radius: 5px; background-color: #404040; color: white; font-weight: bold; font-size: 16px;"> Total Server Uptime: ${getUptime()}</p>
-          </form>
+		<div style="background-color: #404040">
+  			<h1 style="color: white; font-size: 48px;"> ðŸ“£ THE WALL ðŸ“£</h1>
+  			<p style="color: white; font-size: 36px;"> Public Message Board</p>
+            		<p style="background-color: #404040; color: white; font-weight: bold; font-size: 16px;"> Total Server Uptime: ${getUptime()}</p>
+          		<form id='messageForm' action='/post' method='post' style="background-color: #404040; color: white;">
+            			<input type='text' name='message' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your message' autofocus>
+            			<input type='submit' value='Post' style="border-radius: 5px; background-color: #00cc00; color: white; font-weight: bold; font-size: 26px;">
+          		</form>
+		</div>
+			<div style="background-color: #404040">
+				<h2 align='center' style="color: white; font-size: 36px;"> Recent Messages:</h2>
+        			<div align='left' id='messageBoard' style="color: white; font-size: 24px;">${renderMessages(messages)}
+				</div>
+			</div>
+
+		<div align='center'>
+			${generateGIFs(9)}
+		</div>
+
         </div>
-        <h2 align='center' style="border-radius: 5px; background-color: #404040; color: white; font-size: 30px;"> Recent Messages:</h2>
-        <div id='messageBoard' style="border-radius: 5px; background-color: #404040; color: white; font-size: 24px;">${renderMessages(messages)}</div>
-	<div align='center'>
-		${generateGIFs(9)}
-	</div>
 	<script>
           function refreshMessages() {
             var xhr = new XMLHttpRequest();
@@ -113,4 +120,3 @@ function generateGIFs(numGIFs) {
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
-
