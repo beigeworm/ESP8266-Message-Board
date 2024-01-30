@@ -78,6 +78,7 @@ Place the `server.js` file in this new folder.
 
 > pm2 start server.js
 
+(if something is already using port 80 you will need to change this in `server.js`)
 The Wall should now be reachable at your server's ip address.
 
 
