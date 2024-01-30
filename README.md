@@ -78,9 +78,8 @@ Place the `server.js` file in this new folder.
 
 > pm2 start server.js
 
+The Wall should now be reachable at your servcers ip address.
+
 
 (to stop the server..)
-
 > pm2 stop server.js
-
-The Wall should now be reachable at your servcers ip address.
