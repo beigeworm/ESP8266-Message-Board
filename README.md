@@ -56,3 +56,31 @@ Make sure to select 'Erase all flash contents' to ENABLED.
 
 Click Upload Script.
 
+-------------------------------------------------------------------------------------------------------------
+
+**For JS Server**
+
+Start an ssh connection to your server and login (I used linode for testing)
+
+> mkdir jsServer
+
+> cd jsServer
+
+Place the `server.js` file in this new folder.
+
+> sudo apt install nodejs npm
+
+> npm init -y
+
+> npm install express body-parser
+
+> npm install -g pm2
+
+> pm2 start server.js
+
+
+(to stop the server..)
+
+> pm2 stop server.js
+
+The Wall should now be reachable at your servcers ip address.
