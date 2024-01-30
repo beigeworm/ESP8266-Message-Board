@@ -37,20 +37,20 @@ app.get('/', (req, res) => {
     }
   </style>
       </head>
-      <body style="background:url('https://i.ibb.co/4PhW7wF/whh.png'), linear-gradient(to bottom left, #fa711b, #8104c9)">
+      <body style="font-family: 'Open Sans', sans-serif; background:url('https://i.ibb.co/4PhW7wF/whh.png'), linear-gradient(to bottom left, #fa711b, #8104c9)">
 	<div align='center'>
 		${generateGIFs(9)}
 		<div style="background-color: #404040">
   			<h1 style="color: white; font-size: 48px;"> ðŸ“£ THE WALL ðŸ“£</h1>
-  			<p style="color: white; font-size: 30px;"> Public Message Board</p>
-            		<p style="background-color: #404040; color: white; font-size: 16px;"> Total Server Uptime: ${getUptime()}</p>
+  			<p style="color: white; font-size: 36px;"> Public Message Board</p>
+            		<p style="color: #8a8a8a; font-size: 16px;"> Total Server Uptime: ${getUptime()}</p>
           		<form id='messageForm' action='/post' method='post' style="background-color: #404040; color: white; padding: 20px;">
             			<input type='text' name='message' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your message' autofocus>
             			<input type='submit' value='Post' style="padding: 5px; border-radius: 5px; background-color: #00cc00; color: white; font-weight: bold; font-size: 26px;">
           		</form>
 		</div>
 			<div style="background-color: #404040">
-				<h2 align='center' style="color: white; font-size: 36px;"> Recent Messages:</h2>
+				<h2 align='center' style="color: #8a8a8a; font-size: 36px;"> Recent Messages:</h2>
         			<div align='left' id='messageBoard' style="color: white; font-size: 24px;">${renderMessages(messages)}
 				</div>
 			</div>
