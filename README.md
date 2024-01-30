@@ -58,7 +58,7 @@ Click Upload Script.
 
 -------------------------------------------------------------------------------------------------------------
 
-**For JS Server**
+**For JS Server** (on debian based linux)
 
 Start an ssh connection to your server and login (I used linode for testing)
 
