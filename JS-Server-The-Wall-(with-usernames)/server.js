@@ -23,13 +23,13 @@ app.get('/', (req, res) => {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
   <style>
       @keyframes flashColors {
-    0% { color: #ff0000; }      /* Red */
-    20% { color: #0000ff; }     /* Blue */
-    40% { color: #00ff00; }     /* Green */
-    60% { color: #ffff00; }     /* Yellow */
-    80% { color: #ff00ff; }    /* Purple */
-  100% { color: #ff0000; }      /* Red */
-  }
+  	0% { color: #ff0000; }      /* Red */
+  	20% { color: #0000ff; }     /* Blue */
+  	40% { color: #00ff00; }     /* Green */
+  	60% { color: #ffff00; }     /* Yellow */
+  	80% { color: #ff00ff; }    /* Purple */
+	100% { color: #ff0000; }      /* Red */
+	}
     h1 {
       border-radius: 5px;
       background-color: #404040;
@@ -40,30 +40,30 @@ app.get('/', (req, res) => {
   </style>
       </head>
       <body style="font-family: 'Open Sans', sans-serif; background:url('https://i.ibb.co/4PhW7wF/whh.png'), linear-gradient(to bottom left, #fa711b, #8104c9)">
-  <div align='center'>
-    ${generateGIFs(9)}
-    <div style="background-color: #404040">
-        <h1 style="color: white; font-size: 48px;"> ðŸ“£ THE WALL ðŸ“£</h1>
-        <p style="color: white; font-size: 36px;"> Public Message Board</p>
-                <p style="color: #8a8a8a; font-size: 16px;"> Total Server Uptime: ${getUptime()}</p>
-              <form id='messageForm' action='/post' method='post' style="background-color: #404040; color: white; padding: 20px;">
-          <input type='text' name='username' value='${req.body.username || ''}' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your username' required>
-            <input type='text' name='message' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your message' required autofocus>
-          <input type='submit' value='Post' style="padding: 5px; border-radius: 5px; background-color: #00cc00; color: white; font-weight: bold; font-size: 26px;">
-      </form>
-    </div>
-      <div style="background-color: #404040">
-        <h2 align='center' style="color: #8a8a8a; font-size: 36px;"> Recent Messages:</h2>
-              <div align='left' id='messageBoard' style="color: white; font-size: 24px;">${renderMessages(messages)}
-        </div>
-      </div>
+	<div align='center'>
+		${generateGIFs(9)}
+		<div style="background-color: #404040">
+  			<h1 style="color: white; font-size: 48px;"> ðŸ“£ THE WALL ðŸ“£</h1>
+  			<p style="color: white; font-size: 36px;"> Public Message Board</p>
+            		<p style="color: #8a8a8a; font-size: 16px;"> Total Server Uptime: ${getUptime()}</p>
+          		    <form id='messageForm' action='/post' method='post' style="background-color: #404040; color: white; padding: 20px;">
+      				<input type='text' name='username' value='${usernameValue}' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your username' required>
+      				<input type='text' name='message' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your message' required>
+      				<input type='submit' value='Post' style="padding: 5px; border-radius: 5px; background-color: #00cc00; color: white; font-weight: bold; font-size: 26px;">
+    			</form>
+		</div>
+			<div style="background-color: #404040">
+				<h2 align='center' style="color: #8a8a8a; font-size: 36px;"> Recent Messages:</h2>
+        			<div align='left' id='messageBoard' style="color: white; font-size: 24px;">${renderMessages(messages)}
+				</div>
+			</div>
 
-    <div align='center'>
-      ${generateGIFs(9)}
-    </div>
+		<div align='center'>
+			${generateGIFs(9)}
+		</div>
 
         </div>
-  <script>
+	<script>
           function refreshMessages() {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
@@ -96,12 +96,10 @@ app.post('/post', (req, res) => {
   messages.push({ username: newUsername, message: newMessage });
   fs.writeFileSync('messages.json', JSON.stringify(messages));
 
-  // Redirect to the home page with the preserved username in the query parameter
   res.redirect(`/?username=${encodeURIComponent(newUsername)}`);
 });
 
 app.get('/messages', (req, res) => {
-  // Read messages from messages.json
   const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
 
   res.send(renderMessages(messages));
