@@ -47,8 +47,8 @@ app.get('/', (req, res) => {
   			<p style="color: white; font-size: 36px;"> Public Message Board</p>
             		<p style="color: #8a8a8a; font-size: 16px;"> Total Server Uptime: ${getUptime()}</p>
           		    <form id='messageForm' action='/post' method='post' style="background-color: #404040; color: white; padding: 20px;">
-      				<input type='text' name='username' value='${usernameValue}' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your username' required>
-      				<input type='text' name='message' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your message' required>
+      				<input type='text' name='username' value='${usernameValue}' style="border-radius: 5px; font-size: 24px;" placeholder='Enter a username' required>
+      				<input type='text' name='message' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your message' required autofocus>
       				<input type='submit' value='Post' style="padding: 5px; border-radius: 5px; background-color: #00cc00; color: white; font-weight: bold; font-size: 26px;">
     			</form>
 		</div>
