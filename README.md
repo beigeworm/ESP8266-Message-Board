@@ -74,6 +74,8 @@ Place the `server.js` file in this new folder.
 
 > npm install express body-parser
 
+> npm insatll axios 
+
 > npm install -g pm2
 
 > pm2 start server.js
