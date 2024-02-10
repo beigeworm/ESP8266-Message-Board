@@ -2,23 +2,33 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const os = require('os');
+const axios = require('axios'); 
 
 const app = express();
 const port = 80;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-  // Read messages from messages.json
-  const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
-  const usernameValue = req.query.username || '';
+// Function to get the user's IP address and other relevant information from the request
+function getUserInfo(req) {
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  const userAgent = req.headers['user-agent'];
+  return { ip, userAgent };
+}
 
-  // Render the HTML code with messages
+function getCurrentTimestamp() {
+  const now = new Date();
+  return now.toLocaleString();
+}
+
+app.get('/', (req, res) => {
+  const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
+  const usernameValue = req.query.username || ''; 
   const html = `
     <html>
       <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=0.8">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
   <style>
       @keyframes flashColors {
@@ -45,15 +55,15 @@ app.get('/', (req, res) => {
   			<h1 style="color: white; font-size: 48px;"> ðŸ“£ THE WALL ðŸ“£</h1>
   			<p style="color: white; font-size: 36px;"> Public Message Board</p>
             		<p style="color: #8a8a8a; font-size: 16px;"> Total Server Uptime: ${getUptime()}</p>
-          		<form id='messageForm' action='/post' method='post' style="background-color: #404040; color: white; padding: 20px;">
-      				<input type='text' name='username' value='${usernameValue}' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your username' required>
-     			 	<input type='text' name='message' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your message' required autofocus>
-     				<input type='submit' value='Post' style="padding: 5px; border-radius: 5px; background-color: #00cc00; color: white; font-weight: bold; font-size: 26px;">
-    			</form>	
+          		    <form id='messageForm' action='/post' method='post' style="background-color: #404040; color: white; padding: 20px;">
+      				<input type='text' name='username' value='${usernameValue}' style="border-radius: 5px; font-size: 24px;" placeholder='Enter a username' required>
+      				<input type='text' name='message' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your message' required autofocus>
+      				<input type='submit' value='Post' style="padding: 5px; border-radius: 5px; background-color: #00cc00; color: white; font-weight: bold; font-size: 26px;">
+    			</form>
 		</div>
 			<div style="background-color: #404040">
 				<h2 align='center' style="color: #8a8a8a; font-size: 36px;"> Recent Messages:</h2>
-        			<div align='left' id='messageBoard' style="color: white; font-size: 24px;">${renderMessages(messages)}
+        			<div align='left' id='messageBoard' style="color: white;">${renderMessages(messages)}
 				</div>
 			</div>
 
@@ -82,7 +92,7 @@ app.get('/', (req, res) => {
   res.send(html);
 });
 
-app.post('/post', (req, res) => {
+app.post('/post', async (req, res) => {
   const newUsername = req.body.username;
   const newMessage = req.body.message;
 
@@ -91,17 +101,38 @@ app.post('/post', (req, res) => {
     return;
   }
 
+  const userInfo = getUserInfo(req);
+
+  const userData = { 
+    username: newUsername, 
+    ipAddress: userInfo.ip,
+    userAgent: userInfo.userAgent
+  };
+  fs.appendFileSync('users.json', JSON.stringify(userData) + '\n');
+
+  const newMessageWithTimestamp = {
+    username: newUsername,
+    message: newMessage,
+    timestamp: getCurrentTimestamp()
+  };
+
   const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
-  messages.push({ username: newUsername, message: newMessage });
+  messages.push(newMessageWithTimestamp);
   fs.writeFileSync('messages.json', JSON.stringify(messages));
 
-  // Redirect to the home page with the preserved username in the query parameter
   res.redirect(`/?username=${encodeURIComponent(newUsername)}`);
 });
 
 function renderMessages(messages) {
   const reversedMessages = messages.slice().reverse();
-  return reversedMessages.map(({ username, message }) => `<p><strong>${username}:</strong> ${message}</p>`).join('');
+  return reversedMessages.map(({ username, message, timestamp }) => `
+    <div style="margin-bottom: 20px; color: #8a8a8a; border-bottom: 1px solid #ccc;">
+      <p style="margin-bottom: 5px;">
+        <strong style="margin-right: 5px; color: #FFFFFF; font-size: 24px;">${username}</strong> 
+        <span style="font-size: 12px;">(${timestamp})</span>
+      </p>
+      <p style="margin-top: 0; font-size: 16px; color: #FFFFFF;">${message}</p>
+    </div>`).join('');
 }
 
 function getUptime() {
