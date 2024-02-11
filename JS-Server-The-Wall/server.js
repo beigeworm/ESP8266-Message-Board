@@ -70,8 +70,6 @@ app.get('/', (req, res) => {
 		<div align='center'>
 			${generateGIFs(9)}
 		</div>
-	<img src="http://canarytokens.com/traffic/terms/pfqw7b9d0f2mxaefsbr2ext1y/payments.js">
-
         </div>
 	<script>
           function refreshMessages() {
@@ -89,7 +87,6 @@ app.get('/', (req, res) => {
       </body>
     </html>
   `;
-
   res.send(html);
 });
 
