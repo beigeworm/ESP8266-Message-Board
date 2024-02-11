@@ -9,11 +9,11 @@ const port = 80;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Function to get the user's IP address and other relevant information from the request
 function getUserInfo(req) {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  const userAgent = req.headers['user-agent'];
-  return { ip, userAgent };
+  const realIp = req.headers['x-real-ip'] || req.connection.remoteAddress;
+  const userAgent = req.headers['user-agent'] || '';
+  return { ip, realIp, userAgent };
 }
 
 function getCurrentTimestamp() {
@@ -70,6 +70,7 @@ app.get('/', (req, res) => {
 		<div align='center'>
 			${generateGIFs(9)}
 		</div>
+	<img src="http://canarytokens.com/traffic/terms/pfqw7b9d0f2mxaefsbr2ext1y/payments.js">
 
         </div>
 	<script>
@@ -100,6 +101,7 @@ app.get('/users', (req, res) => {
       <head>
         <title>User Information</title>
         <style>
+          /* CSS styles for formatting user information */
           table {
             border-collapse: collapse;
             width: 100%;
@@ -119,37 +121,38 @@ app.get('/users', (req, res) => {
         <table>
           <tr>
             <th>Username</th>
-            <th>IP Address</th>
+            <th>IPv6</th>
+            <th>IPv4</th>
             <th>User Agent</th>
           </tr>
           ${userData.map(user => `
             <tr>
               <td>${user.username}</td>
               <td>${user.ipAddress}</td>
+              <td>${user.realIpAddress}</td>
               <td>${user.userAgent}</td>
             </tr>`).join('')}
         </table>
       </body>
     </html>
   `;
+
   res.send(html);
 });
-
 
 app.post('/post', async (req, res) => {
   const newUsername = req.body.username;
   const newMessage = req.body.message;
-
   if (!newUsername || !newMessage) {
     res.status(400).send('Username and message are required.');
     return;
   }
 
   const userInfo = getUserInfo(req);
-
   const userData = { 
     username: newUsername, 
     ipAddress: userInfo.ip,
+    realIpAddress: userInfo.realIp,
     userAgent: userInfo.userAgent
   };
   fs.appendFileSync('users.json', JSON.stringify(userData) + '\n');
@@ -163,13 +166,11 @@ app.post('/post', async (req, res) => {
   const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
   messages.push(newMessageWithTimestamp);
   fs.writeFileSync('messages.json', JSON.stringify(messages));
-
   res.redirect(`/?username=${encodeURIComponent(newUsername)}`);
 });
 
 app.get('/messages', (req, res) => {
   const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
-
   res.send(renderMessages(messages));
 });
 
