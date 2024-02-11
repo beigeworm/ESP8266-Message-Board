@@ -133,7 +133,6 @@ app.get('/users', (req, res) => {
       </body>
     </html>
   `;
-
   res.send(html);
 });
 
