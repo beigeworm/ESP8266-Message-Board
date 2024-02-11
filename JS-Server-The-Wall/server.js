@@ -92,6 +92,50 @@ app.get('/', (req, res) => {
   res.send(html);
 });
 
+
+app.get('/users', (req, res) => {
+  const userData = fs.readFileSync('users.json', 'utf8').split('\n').filter(Boolean).map(JSON.parse);
+  const html = `
+    <html>
+      <head>
+        <title>User Information</title>
+        <style>
+          table {
+            border-collapse: collapse;
+            width: 100%;
+          }
+          th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+          }
+          th {
+            background-color: #f2f2f2;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>User Information</h1>
+        <table>
+          <tr>
+            <th>Username</th>
+            <th>IP Address</th>
+            <th>User Agent</th>
+          </tr>
+          ${userData.map(user => `
+            <tr>
+              <td>${user.username}</td>
+              <td>${user.ipAddress}</td>
+              <td>${user.userAgent}</td>
+            </tr>`).join('')}
+        </table>
+      </body>
+    </html>
+  `;
+  res.send(html);
+});
+
+
 app.post('/post', async (req, res) => {
   const newUsername = req.body.username;
   const newMessage = req.body.message;
@@ -121,6 +165,12 @@ app.post('/post', async (req, res) => {
   fs.writeFileSync('messages.json', JSON.stringify(messages));
 
   res.redirect(`/?username=${encodeURIComponent(newUsername)}`);
+});
+
+app.get('/messages', (req, res) => {
+  const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
+
+  res.send(renderMessages(messages));
 });
 
 function renderMessages(messages) {
