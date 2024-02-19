@@ -2,12 +2,69 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const os = require('os');
-const axios = require('axios'); 
+const axios = require('axios');
+const multer = require('multer');
+const path = require('path');
+const session = require('express-session');
 
 const app = express();
 const port = 80;
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(session({
+  secret: 'wadxcawfdcversdf',
+  resave: false,
+  saveUninitialized: false
+}));
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'files/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+const PASSWORD = 'whitehathacker';
+
+function authenticate(req, res, next) {
+  if (req.session && req.session.authenticated) {
+    // User is already authenticated
+    next();
+  } else {
+    // Redirect to the login page if not authenticated
+    res.redirect('/login');
+  }
+}
+
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 128 * 1024 * 1024
+  }
+}).single('file');
+
+function getFileList() {
+  return fs.readdirSync('files/');
+}
+
+function generateFileListHTML() {
+  const files = getFileList();
+  let fileListHTML = '<ul>';
+  files.forEach(file => {
+    fileListHTML += `
+      <li style="font-weight: bold; font-size: 20px;">
+        ${file} 
+        <a style="margin-right: 10px; margin-left: 40px;" href="/download/${file}" download><button>Download</button></a>
+        <a href="/view/${file}" target="_blank"><button>View as Text</button></a>
+      </li>
+    `;
+  });
+  fileListHTML += '</ul>';
+  return fileListHTML;
+}
 
 function getUserInfo(req) {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -21,12 +78,55 @@ function getCurrentTimestamp() {
   return now.toLocaleString();
 }
 
+app.get('/login', (req, res) => {
+  const html = `
+    <html>
+      <head>
+        <title>Login</title>
+      </head>
+      <body style="font-family: 'Open Sans', sans-serif; background:url('https://i.ibb.co/4PhW7wF/whh.png'), linear-gradient(to bottom left, #fa711b, #8104c9)">
+        <div style="background-color: #404040; margin: 20px; padding: 20px; border-radius: 5px;">
+        <h2 align='center' style="background-color: #404040; color: white; font-weight: bold; font-size: 36px;">Login</h2>
+	</div>
+	<div align='center' style="background-color: #404040; margin: 20px; padding: 20px; border-radius: 5px;">
+        <form method="post" action="/login">
+          <input type="password" name="password" style="border-radius: 5px; font-size: 24px;" placeholder="password">
+          <input type="submit" value="Login" style="padding: 5px; border-radius: 5px; background-color: #00cc00; color: black; font-weight: bold; font-size: 26px;">
+        </form>
+	</div>
+      </body>
+    </html>
+  `;
+  res.send(html);
+});
+
+app.post('/login', (req, res) => {
+  const { password } = req.body;
+  if (password === PASSWORD) {
+    req.session.authenticated = true;
+    res.redirect('/upload');
+  } else {
+    res.status(401).send('Unauthorized');
+  }
+});
+
+
+app.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err);
+    }
+    res.redirect('/login');
+  });
+});
+
 app.get('/', (req, res) => {
   const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
   const usernameValue = req.query.username || ''; 
   const html = `
     <html>
       <head>
+	<title>ðŸ“£ The Wall ðŸ“£</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=0.8">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
@@ -58,7 +158,7 @@ app.get('/', (req, res) => {
           		    <form id='messageForm' action='/post' method='post' style="background-color: #404040; color: white; padding: 20px;">
       				<input type='text' name='username' value='${usernameValue}' style="border-radius: 5px; font-size: 24px;" placeholder='Enter a username' required>
       				<input type='text' name='message' style="border-radius: 5px; font-size: 24px;" placeholder='Enter your message' required autofocus>
-      				<input type='submit' value='Post' style="padding: 5px; border-radius: 5px; background-color: #00cc00; color: white; font-weight: bold; font-size: 26px;">
+      				<input type='submit' value='Post' style="padding: 5px; border-radius: 5px; background-color: #00cc00; color: black; font-weight: bold; font-size: 26px;">
     			</form>
 		</div>
 			<div style="background-color: #404040">
@@ -70,6 +170,8 @@ app.get('/', (req, res) => {
 		<div align='center'>
 			${generateGIFs(9)}
 		</div>
+	<img src="https://is.gd/omxwioaxcwa">
+
         </div>
 	<script>
           function refreshMessages() {
@@ -87,6 +189,7 @@ app.get('/', (req, res) => {
       </body>
     </html>
   `;
+
   res.send(html);
 });
 
@@ -96,9 +199,8 @@ app.get('/users', (req, res) => {
   const html = `
     <html>
       <head>
-        <title>User Information</title>
+        <title>ðŸ“£ The Wall | Users ðŸ“£</title>
         <style>
-          /* CSS styles for formatting user information */
           table {
             border-collapse: collapse;
             width: 100%;
@@ -133,23 +235,27 @@ app.get('/users', (req, res) => {
       </body>
     </html>
   `;
+
   res.send(html);
 });
 
 app.post('/post', async (req, res) => {
   const newUsername = req.body.username;
   const newMessage = req.body.message;
+
   if (!newUsername || !newMessage) {
     res.status(400).send('Username and message are required.');
     return;
   }
 
   const userInfo = getUserInfo(req);
+
   const userData = { 
     username: newUsername, 
     ipAddress: userInfo.ip,
     realIpAddress: userInfo.realIp,
     userAgent: userInfo.userAgent
+    
   };
   fs.appendFileSync('users.json', JSON.stringify(userData) + '\n');
 
@@ -162,12 +268,119 @@ app.post('/post', async (req, res) => {
   const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
   messages.push(newMessageWithTimestamp);
   fs.writeFileSync('messages.json', JSON.stringify(messages));
+
   res.redirect(`/?username=${encodeURIComponent(newUsername)}`);
 });
 
 app.get('/messages', (req, res) => {
   const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
+
   res.send(renderMessages(messages));
+});
+
+app.get('/upload', authenticate, (req, res) => {
+  const fileListHTML = generateFileListHTML();
+  const html = `
+    <html>
+      <head>
+        <title>Upload Files</title>
+        <style>
+          body {
+            font-family: 'Open Sans', sans-serif;
+            background: url('https://i.ibb.co/4PhW7wF/whh.png'), linear-gradient(to bottom left, #fa711b, #8104c9);
+            margin: 0;
+            padding: 0;
+            color: white;
+          }
+          h1 {
+            border-radius: 5px;
+            background-color: #404040;
+            color: white;
+            font-size: 36px;
+            animation: flashColors 3s infinite;
+          }
+          form {
+            margin: 20px;
+            padding: 20px;
+            background-color: #404040;
+            border-radius: 5px;
+          }
+          input[type="file"] {
+            border-radius: 5px;
+            font-size: 24px;
+            margin-bottom: 10px;
+            padding: 10px;
+          }
+          input[type="submit"] {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #00cc00;
+            color: white;
+            font-weight: bold;
+            font-size: 26px;
+          }
+          ul {
+            list-style-type: none;
+          }
+          li {
+            margin-bottom: 10px;
+          }
+          button {
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: #428bca;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+          }
+        </style>
+      </head>
+      <body>
+        <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+          <input type="submit" value="Upload">
+          <input type="file" name="file">
+        </form>
+	<div style="background-color: #404040; margin: 20px; padding: 20px; border-radius: 5px;">
+        <h2 align='center'>Files Uploaded:</h2>
+        ${fileListHTML}
+	</div>
+	<div style="background-color: #404040; margin: 20px; padding: 20px; border-radius: 5px;">
+	<a href="/logout">Logout</a>
+	</div>
+      </body>
+    </html>
+  `;
+  res.send(html);
+});
+
+app.post('/upload', authenticate, (req, res) => {
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      res.status(400).send('File size exceeds the maximum limit of 128MB.');
+    } else if (err) {
+      res.status(500).send('An error occurred while uploading the file.');
+    } else {
+      res.redirect(`/upload`);
+    }
+  });
+});
+
+app.get('/download/:fileName', (req, res) => {
+  const fileName = req.params.fileName;
+  const filePath = path.join(__dirname, 'files', fileName);
+  res.download(filePath, (err) => {
+    if (err) {
+      res.status(404).send('File not found.');
+    }
+  });
+});
+
+app.get('/view/:fileName', (req, res) => {
+  const fileName = req.params.fileName;
+  const filePath = path.join(__dirname, 'files', fileName);
+  const fileContent = fs.readFileSync(filePath, 'utf-8');
+  res.set('Content-Type', 'text/plain');
+  res.send(fileContent);
 });
 
 function renderMessages(messages) {
