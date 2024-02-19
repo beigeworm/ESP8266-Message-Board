@@ -78,7 +78,9 @@ Place the `server.js` file in this new folder.
 
 > npm install multer
 
-> npm install express-fileupload 
+> npm install express-fileupload
+
+> npm install express-session
 
 > npm install -g pm2
 
