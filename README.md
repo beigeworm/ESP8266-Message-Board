@@ -74,7 +74,11 @@ Place the `server.js` file in this new folder.
 
 > npm install express body-parser
 
-> npm insatll axios 
+> npm install axios
+
+> npm install multer
+
+> npm install express-fileupload 
 
 > npm install -g pm2
 
