@@ -1,4 +1,3 @@
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
@@ -14,7 +13,7 @@ const port = 80;
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
-  secret: 'f45tg667hjwg6y7h76r',
+  secret: 'gh6ry7hjt7jtcm',
   resave: false,
   saveUninitialized: false
 }));
@@ -28,7 +27,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const PASSWORD = 'CHANGEME';
+const PASSWORD = 'password123';
 
 function authenticate(req, res, next) {
   if (req.session && req.session.authenticated) {
@@ -84,7 +83,10 @@ app.get('/login', (req, res) => {
         <title>Login</title>
       </head>
       <body style="font-family: 'Open Sans', sans-serif; background:url('https://i.ibb.co/4PhW7wF/whh.png'), linear-gradient(to bottom left, #fa711b, #8104c9)">
-        <div style="background-color: #404040; margin: 20px; padding: 20px; border-radius: 5px;">
+        <div align='center'>
+		${generateGIFs(9)}
+	</div>
+	<div style="background-color: #404040; margin: 20px; padding: 20px; border-radius: 5px;">
         <h2 align='center' style="background-color: #404040; color: white; font-weight: bold; font-size: 36px;">Login</h2>
 	</div>
 	<div align='center' style="background-color: #404040; margin: 20px; padding: 20px; border-radius: 5px;">
@@ -92,6 +94,9 @@ app.get('/login', (req, res) => {
           <input type="password" name="password" style="border-radius: 5px; font-size: 24px;" placeholder="password">
           <input type="submit" value="Login" style="padding: 5px; border-radius: 5px; background-color: #00cc00; color: black; font-weight: bold; font-size: 26px;">
         </form>
+	</div>
+        <div align='center'>
+		${generateGIFs(9)}
 	</div>
       </body>
     </html>
@@ -191,7 +196,6 @@ app.get('/', (req, res) => {
 
   res.send(html);
 });
-
 
 app.get('/users', (req, res) => {
   const userData = fs.readFileSync('users.json', 'utf8').split('\n').filter(Boolean).map(JSON.parse);
@@ -335,16 +339,22 @@ app.get('/upload', authenticate, (req, res) => {
         </style>
       </head>
       <body>
+        <div align='center'>
+		${generateGIFs(9)}
+	</div>
         <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
           <input type="submit" value="Upload">
           <input type="file" name="file">
         </form>
 	<div style="background-color: #404040; margin: 20px; padding: 20px; border-radius: 5px;">
-        <h2 align='center'>Files Uploaded:</h2>
+        <h2 align='center'>Uploaded Files</h2>
         ${fileListHTML}
 	</div>
 	<div style="background-color: #404040; margin: 20px; padding: 20px; border-radius: 5px;">
 	<a href="/logout">Logout</a>
+	</div>
+        <div align='center'>
+		${generateGIFs(9)}
 	</div>
       </body>
     </html>
@@ -411,3 +421,4 @@ function generateGIFs(numGIFs) {
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
