@@ -56,7 +56,7 @@ function generateFileListHTML() {
       <li style="font-weight: bold; font-size: 20px;">
         ${file} 
         <a style="margin-right: 10px; margin-left: 40px;" href="/download/${file}" download><button>Download</button></a>
-        <a href="/view/${file}" target="_blank"><button>View as Text</button></a>
+        <a href="/view/${file}" target="_blank"><button>View Raw</button></a>
       </li>
     `;
   });
