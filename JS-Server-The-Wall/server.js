@@ -13,7 +13,7 @@ const port = 80;
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
-  secret: 'wadxcawfdcversdf',
+  secret: 'f45tg667hjwg6y7h76r',
   resave: false,
   saveUninitialized: false
 }));
@@ -27,14 +27,12 @@ const storage = multer.diskStorage({
   }
 });
 
-const PASSWORD = 'whitehathacker';
+const PASSWORD = 'CHANGEME';
 
 function authenticate(req, res, next) {
   if (req.session && req.session.authenticated) {
-    // User is already authenticated
     next();
   } else {
-    // Redirect to the login page if not authenticated
     res.redirect('/login');
   }
 }
