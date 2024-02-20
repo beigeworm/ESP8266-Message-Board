@@ -50,7 +50,7 @@ function getFileList() {
 
 function generateFileListHTML() {
   const files = getFileList();
-  let fileListHTML = '<table style="border-collapse: collapse; width: 90%;">';
+  let fileListHTML = '<table style="border-collapse: collapse; width: 100%;">';
   fileListHTML += `
     <tr>
       <th style="border: 1px solid #dddddd; padding: 8px;">Filename</th>
