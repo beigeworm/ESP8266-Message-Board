@@ -50,17 +50,24 @@ function getFileList() {
 
 function generateFileListHTML() {
   const files = getFileList();
-  let fileListHTML = '<ul>';
+  let fileListHTML = '<table style="border-collapse: collapse; width: 90%;">';
+  fileListHTML += `
+    <tr>
+      <th style="border: 1px solid #dddddd; padding: 8px;">Filename</th>
+      <th style="border: 1px solid #dddddd; padding: 8px;">Download</th>
+      <th style="border: 1px solid #dddddd; padding: 8px;">View</th>
+    </tr>
+  `;
   files.forEach(file => {
     fileListHTML += `
-      <li style="font-weight: bold; font-size: 20px;">
-        ${file} 
-        <a style="margin-right: 10px; margin-left: 40px;" href="/download/${file}" download><button>Download</button></a>
-        <a href="/view/${file}" target="_blank"><button>View Raw</button></a>
-      </li>
+      <tr>
+        <td style="border: 1px solid #dddddd; padding: 8px; font-weight: bold;">${file}</td>
+        <td style="border: 1px solid #dddddd; padding: 8px;"><a href="/download/${file}" download><button>Download</button></a></td>
+        <td style="border: 1px solid #dddddd; padding: 8px;"><a href="/view/${file}" target="_blank"><button>View Raw</button></a></td>
+      </tr>
     `;
   });
-  fileListHTML += '</ul>';
+  fileListHTML += '</table>';
   return fileListHTML;
 }
 
