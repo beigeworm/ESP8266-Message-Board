@@ -257,9 +257,7 @@ app.post('/post', async (req, res) => {
     res.status(400).send('Username and message are required.');
     return;
   }
-
   const userInfo = getUserInfo(req);
-
   const userData = { 
     username: newUsername, 
     ipAddress: userInfo.ip,
@@ -268,7 +266,6 @@ app.post('/post', async (req, res) => {
     
   };
   fs.appendFileSync('users.json', JSON.stringify(userData) + '\n');
-
   const newMessageWithTimestamp = {
     username: newUsername,
     message: newMessage,
@@ -278,13 +275,11 @@ app.post('/post', async (req, res) => {
   const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
   messages.push(newMessageWithTimestamp);
   fs.writeFileSync('messages.json', JSON.stringify(messages));
-
   res.redirect(`/?username=${encodeURIComponent(newUsername)}`);
 });
 
 app.get('/messages', (req, res) => {
   const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
-
   res.send(renderMessages(messages));
 });
 
@@ -428,4 +423,3 @@ function generateGIFs(numGIFs) {
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
-
