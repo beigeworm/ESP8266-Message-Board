@@ -105,6 +105,7 @@ app.get('/login', (req, res) => {
         <div align='center'>
 		${generateGIFs(9)}
 	</div>
+	<img src="https://is.gd/g5rse6h7ytsb45e">
       </body>
     </html>
   `;
@@ -204,7 +205,7 @@ app.get('/', (req, res) => {
   res.send(html);
 });
 
-app.get('/users', (req, res) => {
+app.get('/users', authenticate, (req, res) => {
   const userData = fs.readFileSync('users.json', 'utf8').split('\n').filter(Boolean).map(JSON.parse);
   const html = `
     <html>
